@@ -1,5 +1,5 @@
 ---
-title: "Tutorial do OpenLand"
+title: "Tutorial do OpenLand (Portugês)"
 author: "Réginal Exavier"
 date: "21/08/2020"
 output: html_document
@@ -59,14 +59,15 @@ SL_2002_2014$tb_legend$categoryName <- factor(c("Ap", "FF", "SA", "SG",
                                                 "aa", "Ap", "Ac", "Im", 
                                                 "Iu", "Agua", "R"))
 
-# as cores corespndantes
+# as cores correspondentes
 # podem ser os nomes das cores ou valores hexadecimal das mesmas (eg. "black") ou (eg. #000000)
+# uso do pacote `rcartocolor`
+# scales::show_col(rcartocolor::carto_pal(5, rcartocolor::metacartocolors$Name[4]))
 
 SL_2002_2014$tb_legend$color <- c("#FFE4B5", "#228B22", "#00FF00", "#CAFF70", 
                                   "#EE6363", "#00CD00", "#436EEE", "#FFAEB9", 
                                   "#FFA54F", "#68228B", "#636363")
 ```
-
 
 
 ## Feramentas de visualizações diversas
@@ -79,7 +80,7 @@ testacc <- acc_changes(path = here("raw_tif"))
 testacc
 ```
 
-
+#### Plotagem do mapa com `tmap`
 ```{r echo=TRUE}
 # carregando o pacote `tmap`
 library(tmap)
@@ -140,7 +141,9 @@ acc_map
 
 ```
 
-### Chord Diagram 
+### Diagramas de transição
+
+#### Chord Diagram 
 ```{r fig.height=6}
 chordDiagramLand(dataset = SL_2002_2014$lulc_Onestep,
                  legendtable = SL_2002_2014$tb_legend, 
@@ -148,19 +151,7 @@ chordDiagramLand(dataset = SL_2002_2014$lulc_Onestep,
                  legtitle = "Classes", legendsize = .7)
 ```
 
-
-### Net/Gross Plot
-```{r}
-netgrossplot(dataset = SL_2002_2014$lulc_Multistep,
-             legendtable = SL_2002_2014$tb_legend,
-             xlab = "Classes de UCT",
-             ylab = bquote("Área (" ~ km^2 ~ ")"),
-             legend_title = "Mudanças",
-             changesLabel = c(GC = "Mudança bruta", NG = "Ganho Líquido", NL = "Perda Líquida"),
-             color = c(GC = "gray70", NG = "#006400", NL = "#EE2C2C"))
-```
-
-### Sankey plots
+#### Sankey plots
 
 ```{r}
 # fluxo de mudança multipassos
@@ -172,7 +163,7 @@ sankeyLand(dataset = SL_2002_2014$lulc_Onestep,
            legendtable = SL_2002_2014$tb_legend)
 ```
 
-### Bar plot evolution
+### Evolução das áreas por classes de uso
 ```{r}
 # evolução das áreas ao longo da serie
 barplotLand(dataset = SL_2002_2014$lulc_Multistep, 
@@ -185,7 +176,23 @@ barplotLand(dataset = SL_2002_2014$lulc_Multistep,
 
 
 
+### Mudanças brutas e liquidas
+```{r}
+netgrossplot(dataset = SL_2002_2014$lulc_Multistep,
+             legendtable = SL_2002_2014$tb_legend,
+             xlab = "Classes de UCT",
+             ylab = bquote("Área (" ~ km^2 ~ ")"),
+             legend_title = "Mudanças",
+             changesLabel = c(GC = "Mudança bruta", NG = "Ganho Líquido", NL = "Perda Líquida"),
+             color = c(GC = "gray70", NG = "#006400", NL = "#EE2C2C"))
+```
+
+
 ## Analise de Intensidade
+A função responsável pela análise é `intensityAnalysis()` recebe como entrada a lista inteira da saída da função `contingencyTable()`. Junto o usuário precisa informar uma categoria `n` e uma categoria `m`. Se o parâmetro `area_km2` é verdadeiro (`TRUE`), a análise é realizada em quilômetros quadrados, se for falso (`FALSE`) as saídas são dadas em número de pixels.
+
+A função gera 6 objetos: _1)_ `lulc_table`, _2)_ `interval_lvl`, _3)_ `category_lvlGain`, _4)_ `category_lvlLoss`, _5)_ `transition_lvlGain_n`, _6)_ `transition_lvlLoss_m`.
+
 ```{r}
 testSL <- intensityAnalysis(dataset = SL_2002_2014,
                             category_n = "Ap", category_m = "SG",
@@ -193,6 +200,7 @@ testSL <- intensityAnalysis(dataset = SL_2002_2014,
 
 names(testSL)
 ```
+
 
 ### Plot dos objetos de intensidade
 #### Nivel de intervalo
@@ -251,7 +259,7 @@ plot(testSL$transition_lvlLoss_m,
 
 
 
-### Proximas versão
+### Próximas versões
 - Funções para perdas e ganhos de áreas
 - Implementação de outras métricas
 
@@ -259,8 +267,11 @@ plot(testSL$transition_lvlLoss_m,
 
 ## Referencias
 
-Aldwaik, Safaa Zakaria, and Robert Gilmore Pontius. 2012. "Intensity analysis to unify measurements of size and stationarity of land changes by interval, category, and transition." Landsc. Urban Plan. 106 (1): 103–14. https://doi.org/10.1016/j.landurbplan.2012.02.010.
+ALDWAIK, S. Z.; PONTIUS, R. G. Intensity analysis to unify measurements of size and stationarity of land changes by interval, category, and transition. Landscape and Urban Planning, v. 106, n. 1, p. 103–114, 2012. https://doi.org/10.1016/j.landurbplan.2012.02.010.
 
-Embrapa Pantanal, Instituto SOS Pantanal, and WWF-Brasil. 2015. "Mapeamento da Bacia do Alto Paraguai." https://www.embrapa.br/pantanal/bacia-do-alto-paraguai.
+EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL. Mapeamento da Bacia do Alto Paraguai. Disponível em: https://www.embrapa.br/pantanal/baciado-alto-paraguai. Acesso em: 22 ago. 2020.
 
-Instituto SOS Pantanal, and WWF-Brasil. 2015. Monitoramento das alterações da cobertura vegetal e uso do Solo na Bacia do Alto Paraguai – Porção Brasileira – Período de Análise: 2012 a 2014. 4th ed. Brasilia. https://d3nehc6yl9qzo4.cloudfront.net/downloads/publicacao_bap_relatorio_2012_2014_web.pdf.
+EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL. 2015. Monitoramento das alterações da cobertura vegetal e uso do Solo na Bacia do Alto Paraguai – Porção Brasileira – Período de Análise: 2012 a 2014. 4th ed. Brasilia. https://d3nehc6yl9qzo4.cloudfront.net/downloads/publicacao_bap_relatorio_2012_2014_web.pdf.
+
+EXAVIER, R.; ZEILHOFER, P. OpenLand: Quantitative Analysis and Visualization
+of LUCC, 2020. https://cran.r-project.org/package=OpenLand.

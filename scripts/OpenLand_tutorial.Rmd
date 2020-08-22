@@ -1,0 +1,266 @@
+---
+title: "Tutorial do OpenLand"
+author: "Réginal Exavier"
+date: "21/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE,
+                      echo = TRUE)
+library(here)
+```
+
+
+## Instalando e carregando o pacote `OpenLand`.
+```{r}
+# instalação da versão do CRAN
+# install.packages("OpenLand")
+
+# instalação da versão em desenvolvimento do OpenLand GitHub
+# install.packages("devtools")
+# devtools::install_github("reginalexavier/OpenLand")
+
+library(OpenLand)
+```
+
+## Preprocessamento
+
+### Checagem inicial com as funções `summary_dir()` e `summary_map()`
+
+```{r warning=FALSE}
+# a minha pasta contendo os arquivos raster
+list.files(here("raw_tif"), pattern = ".tif$")
+
+summary_dir(path = here("raw_tif"))
+
+summary_map(path = here("raw_tif/landscape_2002.tif"))
+```
+
+
+### Criação das tabelas de contingencias com `contingencyTable()`
+
+```{r}
+# criar o objeto SL_2002_2014
+# SL_2002_2014 <- contingencyTable(input_raster = here("raster_tif/raw_tif"),
+#                  pixelresolution = 30)
+
+SL_2002_2014
+```
+
+
+### Editar os nomes e cores das minhas classes de Uso e Cobertura da Terra(UCT)
+```{r}
+# Os nomes das classes
+SL_2002_2014$tb_legend$categoryName <- factor(c("Ap", "FF", "SA", "SG", 
+                                                "aa", "SF", "Agua", "Iu",
+                                                "Ac", "R", "Im"),
+                                     levels = c("FF", "SF", "SA", "SG", 
+                                                "aa", "Ap", "Ac", "Im", 
+                                                "Iu", "Agua", "R"))
+
+# as cores corespndantes
+# podem ser os nomes das cores ou valores hexadecimal das mesmas (eg. "black") ou (eg. #000000)
+
+SL_2002_2014$tb_legend$color <- c("#FFE4B5", "#228B22", "#00FF00", "#CAFF70", 
+                                  "#EE6363", "#00CD00", "#436EEE", "#FFAEB9", 
+                                  "#FFA54F", "#68228B", "#636363")
+```
+
+
+
+## Feramentas de visualizações diversas
+
+### As mudanças acumuladas com a função `acc_changes()` 
+```{r echo=TRUE}
+
+testacc <- acc_changes(path = here("raw_tif"))
+
+testacc
+```
+
+
+```{r echo=TRUE}
+# carregando o pacote `tmap`
+library(tmap)
+tmap::tmap_options(max.raster = c(plot = 41711112, view = 41711112))
+
+# preparando a plotagem do mapa
+acc_map <- tmap::tm_shape(testacc[[1]]) +
+  tmap::tm_raster(
+    style = "cat",
+    labels = c(
+      paste0(testacc[[2]]$PxValue[1], " Mudança", " (", round(testacc[[2]]$Percent[1], 2), "%", ")"),
+      paste0(testacc[[2]]$PxValue[2], " Mudança", " (", round(testacc[[2]]$Percent[2], 2), "%", ")"),
+      paste0(testacc[[2]]$PxValue[3], " Mudanças", " (", round(testacc[[2]]$Percent[3], 2), "%", ")")
+    ),
+    palette = c("#757575", "#FFD700", "#CD0000"),
+    title = "Mudanças no intervalo \n2002 - 2014"
+  ) +
+  tmap::tm_legend(
+    position = c(0.01, 0.2),
+    legend.title.size = 1.2,
+    legend.title.fontface = "bold",
+    legend.text.size = 0.8
+  ) +
+  tmap::tm_compass(type = "arrow",
+                   position = c("right", "top"),
+                   size = 3) +
+  tmap::tm_scale_bar(
+    breaks = c(seq(0, 40, 10)),
+    position = c(0.76, 0.001),
+    text.size = 0.6
+  ) +
+  tmap::tm_credits(
+    paste0(
+      "Bacia do Rio São Lourenço",
+      "\nMudanças Acumuladas de 2002 a 2014",
+      "\nDados criados com o pacote OpenLand",
+      "\nUCT derivado de Embrapa Pantanal et al. (2015)",
+      "\nDatum: SIRGAS 2000"
+      ),
+    size = 0.7,
+    position = c(0.01, -0, 01)
+  ) +
+  tmap::tm_graticules(
+    n.x = 6,
+    n.y = 6,
+    lines = FALSE,
+    #alpha = 0.1
+    labels.rot = c(0, 90)
+  ) +
+  tmap::tm_layout(inner.margins = c(0.02, 0.02, 0.02, 0.02))
+
+```
+
+
+```{r echo=TRUE, fig.height=8}
+# plotagem do mapa
+acc_map
+
+```
+
+### Chord Diagram 
+```{r fig.height=6}
+chordDiagramLand(dataset = SL_2002_2014$lulc_Onestep,
+                 legendtable = SL_2002_2014$tb_legend, 
+                 legposition = c(1, 0.30),
+                 legtitle = "Classes", legendsize = .7)
+```
+
+
+### Net/Gross Plot
+```{r}
+netgrossplot(dataset = SL_2002_2014$lulc_Multistep,
+             legendtable = SL_2002_2014$tb_legend,
+             xlab = "Classes de UCT",
+             ylab = bquote("Área (" ~ km^2 ~ ")"),
+             legend_title = "Mudanças",
+             changesLabel = c(GC = "Mudança bruta", NG = "Ganho Líquido", NL = "Perda Líquida"),
+             color = c(GC = "gray70", NG = "#006400", NL = "#EE2C2C"))
+```
+
+### Sankey plots
+
+```{r}
+# fluxo de mudança multipassos
+sankeyLand(dataset = SL_2002_2014$lulc_Multistep,
+           legendtable = SL_2002_2014$tb_legend)
+
+# fluxo de mudança passo único
+sankeyLand(dataset = SL_2002_2014$lulc_Onestep,
+           legendtable = SL_2002_2014$tb_legend)
+```
+
+### Bar plot evolution
+```{r}
+# evolução das áreas ao longo da serie
+barplotLand(dataset = SL_2002_2014$lulc_Multistep, 
+            legendtable = SL_2002_2014$tb_legend,
+            area_km2 = T,
+            xlab = "Ano",
+            ylab = bquote("Área (" ~ km^2 ~ ")"),
+            caption = "Classes de uso")
+```
+
+
+
+## Analise de Intensidade
+```{r}
+testSL <- intensityAnalysis(dataset = SL_2002_2014,
+                            category_n = "Ap", category_m = "SG",
+                            area_km2 = TRUE)
+
+names(testSL)
+```
+
+### Plot dos objetos de intensidade
+#### Nivel de intervalo
+```{r}
+
+plot(testSL$interval_lvl,
+     labels = c(leftlabel = "Mudança de area por intervalo (%)",
+                rightlabel = "Mudança anual de área (%)"),
+     marginplot = c(-8, 0), labs = c("Mudanças", "Intensidade Uniforme"), 
+     leg_curv = c(x = .3, y = .2))
+```
+
+
+
+#### Nivel de categoria
+
+```{r}
+# ganho
+plot(testSL$category_lvlGain,
+     labels = c(leftlabel = bquote("Ganho de área (" ~ km^2 ~ ")"),
+                rightlabel = "Intensidade do ganho (%)"),
+     marginplot = c(.3, .3), labs = c("Classes", "Intensidade Uniforme"), 
+     leg_curv = c(x = 2, y = 1.2))
+
+# perda
+plot(testSL$category_lvlLoss,
+     labels = c(leftlabel = bquote("Perda de área (" ~ km ^ 2 ~ ")"),
+                rightlabel = "Intensidade da perda (%)"),
+     marginplot = c(.3, .3), labs = c("Classes", "Intensidade Uniforme"), 
+     leg_curv = c(x = 1, y = 1.3))
+
+```
+
+
+#### Nivel de transição
+
+```{r}
+# ganho
+plot(testSL$transition_lvlGain_n,
+     labels = c(leftlabel = bquote("Ganho de Ap (" ~ km ^ 2 ~ ")"),
+                rightlabel = "Intensidade de ganho de Ap (%)"),
+     marginplot = c(.3, .3), labs = c("Classes", "Intensidade Uniforme"), 
+     leg_curv = c(x = 1, y = 1))
+
+# perda
+plot(testSL$transition_lvlLoss_m,
+     labels = c(leftlabel = bquote("Perda de SG (" ~ km^2 ~ ")"),
+                rightlabel = "Intensidade de perda de SG (%)"),
+     marginplot = c(.3, .3), labs = c("Classes", "Intensidade Uniforme"), 
+     leg_curv = c(x = .1, y = 1.1))
+
+```
+
+
+
+
+
+
+### Proximas versão
+- Funções para perdas e ganhos de áreas
+- Implementação de outras métricas
+
+
+
+## Referencias
+
+Aldwaik, Safaa Zakaria, and Robert Gilmore Pontius. 2012. "Intensity analysis to unify measurements of size and stationarity of land changes by interval, category, and transition." Landsc. Urban Plan. 106 (1): 103–14. https://doi.org/10.1016/j.landurbplan.2012.02.010.
+
+Embrapa Pantanal, Instituto SOS Pantanal, and WWF-Brasil. 2015. "Mapeamento da Bacia do Alto Paraguai." https://www.embrapa.br/pantanal/bacia-do-alto-paraguai.
+
+Instituto SOS Pantanal, and WWF-Brasil. 2015. Monitoramento das alterações da cobertura vegetal e uso do Solo na Bacia do Alto Paraguai – Porção Brasileira – Período de Análise: 2012 a 2014. 4th ed. Brasilia. https://d3nehc6yl9qzo4.cloudfront.net/downloads/publicacao_bap_relatorio_2012_2014_web.pdf.

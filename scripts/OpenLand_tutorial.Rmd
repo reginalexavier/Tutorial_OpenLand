@@ -60,7 +60,7 @@ SL_2002_2014$tb_legend$categoryName <- factor(c("Ap", "FF", "SA", "SG",
                                                 "Iu", "Agua", "R"))
 
 # as cores correspondentes
-# podem ser os nomes das cores ou valores hexadecimal das mesmas (eg. "black") ou (eg. #000000)
+# podem ser os nomes das cores (em ingles)(ex. "black") ou códigos hexadecimais das mesmas (ex. #000000)
 # uso do pacote `rcartocolor`
 # scales::show_col(rcartocolor::carto_pal(5, rcartocolor::metacartocolors$Name[4]))
 

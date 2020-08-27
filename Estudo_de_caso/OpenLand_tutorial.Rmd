@@ -30,11 +30,11 @@ library(OpenLand)
 
 ```{r warning=FALSE}
 # a minha pasta contendo os arquivos raster
-list.files(here("raw_tif"), pattern = ".tif$")
+list.files(here("Estudo_de_caso/raw_tif"), pattern = ".tif$")
 
-summary_dir(path = here("raw_tif"))
+summary_dir(path = here("Estudo_de_caso/raw_tif"))
 
-summary_map(path = here("raw_tif/landscape_2002.tif"))
+summary_map(path = here("Estudo_de_caso/raw_tif/landscape_2002.tif"))
 ```
 
 
@@ -42,7 +42,7 @@ summary_map(path = here("raw_tif/landscape_2002.tif"))
 
 ```{r}
 # criar o objeto SL_2002_2014
-# SL_2002_2014 <- contingencyTable(input_raster = here("raster_tif/raw_tif"),
+# SL_2002_2014 <- contingencyTable(input_raster = here("Estudo_de_caso/raster_tif/raw_tif"),
 #                  pixelresolution = 30)
 
 SL_2002_2014
@@ -75,7 +75,7 @@ SL_2002_2014$tb_legend$color <- c("#FFE4B5", "#228B22", "#00FF00", "#CAFF70",
 ### As mudanças acumuladas com a função `acc_changes()` 
 ```{r echo=TRUE}
 
-testacc <- acc_changes(path = here("raw_tif"))
+testacc <- acc_changes(path = here("Estudo_de_caso/raw_tif"))
 
 testacc
 ```

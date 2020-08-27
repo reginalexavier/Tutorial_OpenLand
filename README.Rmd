@@ -23,13 +23,46 @@ A estrutura de OpenLand é dividida em 3 (três) blocos de funcionalidades, que 
 ```{r, out.width='100%', fig.align='center', fig.cap='Figura 1 - Visão geral conceitual de OpenLand', echo=FALSE}
 knitr::include_graphics('README_files/images/ADI.jpg')
 ```
-### Pré-processamento
 
-Este grupo de funcionalidades é constituído por funções criadas para receber os dados principais de entrada (séries temporais de mapas de UCT em formato matricial) para uma checagem inicial de consistências e/ou transforma-los e guardalos em formatos aproveitáveis pelas etapas posteriores.
+## Instalação
 
-As funções criadas para este grupo de funcionalidades são i) [`summary_dir()`](https://reginalexavier.github.io/OpenLand/reference/summary_dir.html), ii) [`summary_map()`](https://reginalexavier.github.io/OpenLand/reference/summary_map.html), e iii) [`contingencyTable()`](https://reginalexavier.github.io/OpenLand/reference/contingencyTable.html). A primeira função faz uma varredura de uma pasta indicada pelo usuário que contenha objetos raster e informa como saída, características dos mesmos numa tabela. A segunda apresenta informação de um único raster com valor categórico informando a proporção de cada categoria presente numa tabela. Essas duas funções constituem uma forma de obter informação rápida sobre os dados de entrada, desde antes mesmo de continuar com a extração dos dados para as análises. A terceira função (iii) calcula uma tabela de contingência para cada dois rasters consecutivos (iterativamente) no sentido crescente dos anos (etapa múltipla), isto é, nos intervalos [𝑌𝑡, 𝑌𝑡+1] e adicionalmente para o primeiro e o ultimo raster (uma etapa) [𝑌𝑡=1, 𝑌𝑇].
+Para a instalação do pacote via o repositorio CRAN:
 
-### Ferramentas de visualizações
+```{r installation1, eval = FALSE}
+install.packages("OpenLand")
+```
+
+Também esta disponivel a versão em desenvolvimento no GitHub:
+
+```{r installation2, eval = FALSE}
+install.packages("devtools")
+devtools::install_github("reginalexavier/OpenLand")
+```
+
+O material contendo a documentação de todas as funções de OpenLand é acessivel via a [página CRAN](https://cran.r-project.org/web/packages/OpenLand/index.html) do OpenLand ou via o [vignette](https://reginalexavier.github.io/OpenLand/articles/openland_vignette.html) de OpenLand que contem, inclusive, uma introdução sobre as funcionalidades do pacote.
+
+## Este material
+Este material visa ajudar o usuário na estrutura da análise que propõe o pacote. A funcionalidade de OpenLand é demonstrada usando um conjunto de dados de UCT (2002 – 2014) da bacia do rio São Lourenço (MT), que é uma das principais área de contribuição do Pantanal setentrional. Os dados usados são provenientes da 4ª edição do [Monitoramento de Mudanças na Cobertura e Uso da Terra na Bacia do Alto Paraguai - porção brasileira - Período de Revisão: 2012 a 2014](https://www.embrapa.br/pantanal/bacia-do-alto-paraguai) (EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL, 2015) e a série temporal é composta por cinco rasters de UCT: 2002, 2008, 2010, 2012 e 2014.
+
+##### Modo de usar o tutorial:
+É preciso baixar este projeto diretamente na [sua página inicial no GitHub](https://github.com/reginalexavier/Tutorial_OpenLand);  abrir o arquivo `Tutorial_Openland.Rproj` de preferencia com o RStudio. Com o projeto aberto no RSTudio, dentro da pasta principal do projeto tem uma subpasta nomeada `Estudo_de_caso` que contem os scripts da análise do tutorial (`Openland_tutorial.Rmd`) e os 5 arquivos raster `(`r list.files("Estudo_de_caso/raw_tif")`)` da nossa área de estudo na subpasta `raw_tif`.
 
 
-### Analise de Intensidade
+
+#### Referências
+
+ALDWAIK, S. Z.; PONTIUS, R. G. Intensity analysis to unify measurements of size and stationarity of land changes by interval, category, and transition. Landscape and Urban Planning, v. 106, n. 1, p. 103–114, 2012. https://doi.org/10.1016/j.landurbplan.2012.02.010.
+
+EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL. Mapeamento da Bacia do Alto Paraguai. Disponível em: https://www.embrapa.br/pantanal/baciado-alto-paraguai. Acesso em: 22 ago. 2020.
+
+EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL. 2015. Monitoramento das alterações da cobertura vegetal e uso do Solo na Bacia do Alto Paraguai – Porção Brasileira – Período de Análise: 2012 a 2014. 4th ed. Brasilia. https://d3nehc6yl9qzo4.cloudfront.net/downloads/publicacao_bap_relatorio_2012_2014_web.pdf.
+
+EXAVIER, R.; ZEILHOFER, P. OpenLand: Quantitative Analysis and Visualization
+of LUCC, 2020. https://cran.r-project.org/package=OpenLand.
+
+
+
+
+
+
+

@@ -1,0 +1,725 @@
+---
+title: "OpenLand <br>"
+subtitle: "<br/>Uma ferramenta livre para análise quantitativa de mudanças de uso e cobertura da terra (UCT)"
+author: "Réginal Exavier"
+# institute: "RStudio, PBC"
+date: "<br> 31/08/2020"
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: rainbow
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+background-image: url(img/logo_OpenLand.png)
+background-size: 250px
+background-position: 95% 30%
+
+# Sumário
+
+
+
+### 1 Introdução
+  * Dados de Uso e Cobertura da Terra (UCT);
+  * Quantificação de mudanças de UCT;
+  * Desafios
+
+### 2 Análise de Intensidade
+
+### 3 OpenLand
+  * Visão conceitual de OpenLand
+  * Módulos funcionais
+    * Preprocessamento
+    * Ferramentas de Visualização diversas
+    * Análise de Intensidade
+
+### 4 Versões futuras
+  * Futuras implementações
+
+---
+class: inverse, middle, center
+
+# Introdução
+
+---
+
+# Introdução
+
+#### Aumento das taxas de mudança do uso e cobertura da terra (UCT)
+
+--
+
+#### Sustentação e compreensão dos processos de mudanças/transição de UCT
+
+--
+  * Passados e em andamento;
+
+--
+  * Desenvolvimento de modelos;
+
+--
+
+#### Processamento e análise de series espaço temporais de UCT
+  * Disponibilidade crescente de dados UCT provenientes de sensoriamento remoto;
+  * Trabalho manual extenso para análise de conjuntos de grande volume;
+
+--
+
+#### Métodos para quantificação de mudanças de UCT
+  * Formas de análise e visualização espaciais e não espaciais
+  * Análise de Intensidade
+
+--
+
+#### Ferramentas livres e de código aberto na análise e modelagem de mudanças de UCT
+
+---
+# Análise de Intensidade
+
+<p align="justify"> Ela consiste em cálculos sobre as matrizes de transições e permite medir e avaliar a intensidade das mudanças ocorridas na área de estudo em três níveis: <i>(i)</i> intervalo de tempo, <i>(ii)</i> categoria ou classe e <i>(iii)</i> transição. Ela compara a intensidade da mudança entre as categorias durante dois ou mais intervalos de tempo, comparando a mesma com uma intensidade uniforme da mudança hipotética (ALDWAIK; PONTIUS, 2012).</p>
+
+--
+
+background-image: url(img/tabela_equacao.jpg)
+background-size: 750px
+background-position: 50% 85%
+
+
+---
+# Análise de Intensidade
+##### <u>Nível de intervalo:</u> Em quais intervalos de tempo a taxa de variação anual global é relativamente lenta versus rápida?
+
+--
+
+  * #### Intensidade de variação anual para um dado intervalo de tempo:
+$$\begin{equation}
+S_t = \frac{área\ mudada\ no\ interválo\ \left[Y_{t}, Y_{t+1}\right]}{duração\ do\ interválo \left[Y_{t}, Y_{t+1}\right] * (área\ de\ estudo)} \times 100\% \\
+= 
+\frac{\sum_{j=1}^{J} \left[( \sum_{i=1}^{J} C_{tij}) - C_{tij} \right]}{(Y_{t+1} - Y_{t})\left(\sum_{j=1}^{J} \sum_{i=1}^{J} C_{tij}\right)} \times 100\%
+\end{equation}$$
+
+--
+
+  * #### Intensidade uniforme:
+$$\begin{equation}
+U = \frac{área\ mudada\ em\ todos\ os\ intervalos\ \left[Y_{t}, Y_{t+1}\right]}{(duração\ de\ todos\ os\ interválos \left[Y_{t}, Y_{t+1}\right]) * (área\ de\ estudo)} \times 100\% \\
+= \frac{\sum_{t=1}^{T-1} \left\{(Y_{t+1} - Y_t) \sum_{j=1}^{J} \left[\left(\sum_{i=1}^{J} C_{tij}\right) - C_{tjj}   \right]\right\}}{(Y_{T} - Y1) \sum_{t=1}^{T-1} \left[(Y_{t+1} - Y_t) \left(\sum_{j=1}^{J} \sum_{i=1}^{J} C_{tij}\right)  \right]} \times 100\%
+\end{equation}$$
+
+---
+# Análise de Intensidade
+##### <u>Nível de categoria:</u> Dada a resposta à pergunta 1, quais categorias são relativamente dormentes versus ativas em um dado intervalo de tempo, e esse padrão é estável em todos os intervalos de tempo?
+
+--
+
+  * #### Intensidade anual do ganho bruto de uma categoria 𝑗 em um determinado intervalo de tempo:
+$$\begin{equation}
+G_{tj} = \frac{ganho\ bruto\ da\ classe\ j\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ categoria\ j\ no\ tempo\ Y_{t+1})}\times 100\% \\
+= \frac{\left[\left( \sum_{i=1}^{J} C_{tij} \right) - C_{tjj}   \right] / (Y_{t+1} - Y_t)}{\sum_{i=1}^{J} C_{tij})} \times 100\%
+\end{equation}$$
+
+--
+
+  * #### Intensidade anual da perda bruta de uma categoria 𝑗 em um dado intervalo de tempo:
+$$\begin{equation}
+L_{ti} = \frac{perda\ bruta\ da\ classe\ i\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ categoria\ i\ no\ tempo\ Y_{t}} \times 100\% \\
+= \frac{\left[\left( \sum_{j=1}^{J} C_{tij} \right) - C_{tii}   \right] / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J} C_{tij})} \times 100\%
+\end{equation}$$
+
+
+---
+# Análise de Intensidade
+##### <u>Nível de transição:</u> Dadas as respostas às perguntas 1 e 2, quais transições são intensamente evitadas versus direcionadas por uma determinada categoria em um determinado intervalo de tempo, e esse padrão é estável ao longo de intervalos de tempo?
+
+--
+
+  * #### Intensidade anual de transição de uma categoria i para uma categoria n em um dado intervalo de tempo:
+$$\begin{equation}
+R_{tin} = \frac{área\ de\ transição\ da\ classe\ i\ para\ n\ durante\  \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ classe\ i\ no\ tempo\ Y_{t})} \times 100\% \\
+= \frac{C_{tin} / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J} C_{tij})} \times 100\%
+\end{equation}$$
+
+--
+
+  * #### Intensidade uniforme de transição de todas as categorias não-𝑛 para uma categoria n em um dado intervalo de tempo:
+$$\begin{equation}
+W_{tn} = \frac{ganho\ bruto\ da\ classe\ n\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ que\ não\ é\ da\ classe\ n\ no\ tempo\ Y_{t})} \times 100\% \\
+=\frac{\left[\left( \sum_{i=1}^{J} C_{tin} \right) - C_{tnn}   \right] / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J}  \left[\left( \sum_{i=1}^{J} C_{tij} \right) - C_{tnj}   \right]} \times 100\%
+\end{equation}$$
+
+
+---
+# Análise de Intensidade
+##### <u>Nível de transição:</u> Dadas as respostas às perguntas 1 e 2, quais transições são intensamente evitadas versus direcionadas por uma determinada categoria em um determinado intervalo de tempo, e esse padrão é estável ao longo de intervalos de tempo?
+
+--
+
+  * #### Intensidade anual de transição de uma categoria 𝑚 para uma categoria 𝑗 em um dado intervalo de tempo:
+$$\begin{equation}
+Q_{tmj} = \frac{área\ de\ transição\ da\ classe\ m\ para\ j\ durante\  \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ classe\ j\ no\ tempo\ Y_{t+1})} \times 100\% \\
+= \frac{C_{tmj} / (Y_{t+1} - Y_t)}{\sum_{i=1}^{J} C_{tij}} \times 100\%
+\end{equation}$$
+
+--
+  * #### Intensidade uniforme de transição de todas as categorias não-m para uma categoria m em um determinado intervalo de tempo:
+$$\begin{equation}
+V_{tm}= \frac{perda\ bruta\ da\ classe\ m\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ que\ não\ é\ da\ classe\ m\ no\ tempo\ Y_{t+1})} \times 100\% \\
+= \frac{\left[\left( \sum_{j=1}^{J} C_{tmj} \right) - C_{tmm}   \right] / (Y_{t+1} - Y_t)}{\sum_{i=1}^{J}  \left[\left( \sum_{j=1}^{J} C_{tij} \right) - C_{tim}   \right]} \times 100\%
+\end{equation}$$
+
+
+
+---
+class: inverse, middle, center
+
+background-image: url(img/logo_OpenLand.png)
+background-size: 400px
+background-position: 50% 70%
+
+
+
+---
+
+background-image: url(img/links_developers.png)
+background-size: 600px
+background-position: 98% 65%
+# OpenLand
+
+<br><br><br><br><br>
+.pull-left[
+#### Versões publicadas<br> no CRAN:
+  * `1.0.0 :` 23/03/2020
+  * `1.0.1 :` 19/04/2020
+<br>
+
+
+#### Meteriais:
+  * [Página CRAN](https://cran.r-project.org/web/packages/OpenLand/index.html)
+  * [Página GitHub](https://github.com/reginalexavier/OpenLand)
+  * [Vignette](https://reginalexavier.github.io/OpenLand/articles/openland_vignette.html)
+]
+
+---
+
+background-image: url(img/fluxograma.png)
+background-size: 800px
+background-position: 50% 50%
+
+# Visão Conceitual do OpenLand
+---
+class: inverse, middle, center
+#Hello World! `r icon::fa_laptop_code()`
+
+
+---
+# Instalando e carregando OpenLand
+
+### A versão CRAN:
+
+```{r
+install.packages("OpenLand")
+```
+
+--
+
+### Ou
+
+--
+
+### A versão em desenvolvimento no GitHub:
+
+```{r
+if (!require("devtools")) install.packages("devtools")
+devtools::install_github("reginalexavier/OpenLand")
+
+```
+
+--
+
+### Uma vez instalado, OpenLand pode ser carregado com:
+```{r
+library(OpenLand)
+
+```
+
+---
+class: inverse, middle, center
+#Estudo de caso com os dados da bacia do Rio São Lourenço - MT
+
+
+
+```{r include=FALSE}
+library(OpenLand)
+library(here)
+```
+
+---
+# Os meus dados brutos
+
+A funcionalidade do pacote OpenLand é demonstrada usando um conjunto de dados de UCT da bacia do rio São Lourenço (MT), que é um dos principais afluentes do Pantanal setentrional. Os dados usados são provenientes da 4ª edição do Monitoramento de Mudanças na Cobertura e Uso da Terra na Bacia do Alto Paraguai - porção brasileira - Período de Revisão: 2012 a 2014 [(INSTITUTO SOS PANTANAL; WWF-BRASIL, 2015)](https://www.embrapa.br/documents/1354999/1529097/BAP+-+Mapeamento+da+Bacia+do+Alto+Paraguai+-+estudo+completo/e66e3afb-2334-4511-96a0-af5642a56283).
+
+### Quais arquivos que eu tenho?
+
+```{r}
+list.files(path = here("Estudo_de_caso/raw_tif"), pattern = ".tif$")
+```
+
+--
+
+### Algum padrão nos nomes?
+
+--
+
+#### Os nomes dos rasters devem estar em um formato padrão que é:<br> `"algum_texto"` + `"underscore"` + `"o_ano"` (ex: `raster_2020`).
+
+---
+# Checagem Inicial
+```{r
+summary_dir(path = here("Estudo_de_caso/raw_tif"))
+```
+  
+```{r echo=FALSE, warning=FALSE}
+summary_dir(path = here("Estudo_de_caso/raw_tif"))[, c(1:9)]
+
+summary_dir(path = here("Estudo_de_caso/raw_tif"))[, c(10:12)]
+```
+
+---
+# Checagem Inicial
+```{r
+summary_map(path = here("Estudo_de_caso/raw_tif/landscape_2002.tif"))
+```
+  
+  
+```{r echo=FALSE, warning=FALSE}
+summary_map(path = here("Estudo_de_caso/raw_tif/landscape_2002.tif"))
+```
+
+---
+# Criação das tabelas de contingencias
+
+### A função `contingencyTable()`:
+
+--
+```{r
+SL_2002_2014 <- contingencyTable(input_raster = here("Estudo_de_caso/raw_tif"),
+                                 pixelresolution = 30)
+
+```
+<br><br>
+
+--
+
+### Os `r length(SL_2002_2014)` objetos criados:
+
+--
+
+```{r echo=TRUE}
+base::summary(SL_2002_2014)
+```
+
+
+---
+background-image: url(img/tabela_de_contingencia.png)
+background-size: 900px
+background-position: 50% 50%
+# Tabela de contingencia
+
+#### Essa é a estrutura padrão adotada para as tabelas de contingencias dentro do OpenLand
+
+
+---
+# Tabela de contingencia
+
+#### Tabela de contingencia (multipasso) criada com OpenLand
+
+```{r echo=TRUE}
+SL_2002_2014$lulc_Multistep
+```
+
+---
+# Loockup table das legendas
+
+Os dados das colunas ``r names(SL_2002_2014$tb_legend)[c(2,3)]`` são simulados pela função `contingencyTable()`, eles precisam ser editatos com os dados relacionados à área de estudo.
+<br>
+```{r echo=TRUE}
+SL_2002_2014$tb_legend
+```
+
+---
+background-image: url(img/tabela_classes_uct.png)
+background-size: 900px
+background-position: 50% 50%
+
+# Classes de UCT da bacia
+
+#### <center> Classes de UCT da bacia [(INSTITUTO SOS PANTANAL; WWF-BRASIL, 2015)](https://www.embrapa.br/pantanal/bacia-do-alto-paraguai) </center>
+
+
+---
+# Nomes e cores das classes de UCT
+
+#### Edição dos nomes das classes e das cores
+
+> As cores correspondentes podem ser os nomes das cores (em ingles)(ex. "black") ou códigos hexadecimais das mesmas (ex. #000000). <br> O pacote [`rcartocolor`](https://cran.r-project.org/web/packages/rcartocolor/index.html) pode ser utilisado como guia na escolha das cores, `rcartocolor::metacartocolors` nos dá as opções disponiveis.
+
+```{r}
+# os nomes das classes
+SL_2002_2014$tb_legend$categoryName <- factor(c("Ap", "FF", "SA", "SG", 
+                                                "aa", "SF", "Agua", "Iu",
+                                                "Ac", "R", "Im"),
+                                     levels = c("FF", "SF", "SA", "SG", 
+                                                "aa", "Ap", "Ac", "Im", 
+                                                "Iu", "Agua", "R"))
+
+# as cores
+SL_2002_2014$tb_legend$color <- c("#FFE4B5", "#228B22", "#00FF00", "#CAFF70", 
+                                  "#EE6363", "#00CD00", "#436EEE", "#FFAEB9", 
+                                  "#FFA54F", "#68228B", "#636363")
+```
+
+
+---
+# Loockup table das legendas
+
+Depois da atualização dos nomes e cores associados às classes de uso da nossa área de estudo
+
+--
+
+<br>
+```{r echo=TRUE}
+SL_2002_2014$tb_legend
+```
+
+---
+# Ferramentas de visualizações diversas
+
+### As mudanças acumuladas com a função `acc_changes()`
+
+
+```{r echo=TRUE, warning=FALSE}
+testacc <- acc_changes(path = here("Estudo_de_caso/raw_tif"))
+
+testacc
+```
+
+
+---
+background-image: url(img/acc_mymap.png)
+background-size: 600px
+background-position: 50% 50%
+
+# Ferramentas de visualizações diversas
+
+<br><br><br>
+
+.pull-left[
+#### <small>Utilizando <br> [`tmap`](https://cran.r-project.org/web/packages/tmap/index.html)</small>
+]
+
+
+---
+# Ferramentas de visualizações diversas
+
+#### Diagramas de transição
+
+#### Chord Diagram 
+```{r
+chordDiagramLand(dataset = SL_2002_2014$lulc_Onestep,
+                 legendtable = SL_2002_2014$tb_legend, 
+                 legposition = c(1, 0.30),
+                 legtitle = "Classes", legendsize = .7)
+```
+---
+# Ferramentas de visualizações diversas
+
+#### Diagramas de transição (Chord Diagram )
+
+```{r echo=FALSE, out.width='65%', dpi=300, fig.align='center', dev.args=list(pointsize = 13)}
+chordDiagramLand(dataset = SL_2002_2014$lulc_Onestep,
+                 legendtable = SL_2002_2014$tb_legend, 
+                 legposition = c(-1.1, 1),
+                 legtitle = "Classes", legendsize = .7)
+```
+
+---
+# Ferramentas de visualizações diversas
+
+#### Sankey plots (passo único)
+
+```{r fig.height=6.5, fig.width=13, fig.align="center"}
+sankeyLand(dataset = SL_2002_2014$lulc_Onestep,
+           legendtable = SL_2002_2014$tb_legend)
+```
+
+---
+# Ferramentas de visualizações diversas
+
+#### Sankey plots (multipasso)
+
+```{r fig.height=6.5, fig.width=13, fig.align="center"}
+sankeyLand(dataset = SL_2002_2014$lulc_Multistep,
+           legendtable = SL_2002_2014$tb_legend)
+```
+
+---
+# Ferramentas de visualizações diversas
+
+#### Evolução das áreas por classes de uso
+
+```{r echo=FALSE, fig.width=10, fig.align="center"}
+barplotLand(dataset = SL_2002_2014$lulc_Multistep, 
+            legendtable = SL_2002_2014$tb_legend,
+            area_km2 = T,
+            xlab = "Ano",
+            ylab = bquote("Área (" ~ km^2 ~ ")"),
+            caption = "Classes de uso")
+```
+
+---
+# Ferramentas de visualizações diversas
+
+#### Mudanças brutas e liquidas
+```{r echo=FALSE, fig.width=10, fig.align="center"}
+netgrossplot(dataset = SL_2002_2014$lulc_Multistep,
+             legendtable = SL_2002_2014$tb_legend,
+             xlab = "Classes de UCT",
+             ylab = bquote("Área (" ~ km^2 ~ ")"),
+             legend_title = "Mudanças",
+             changesLabel = c(GC = "Mudança bruta", NG = "Ganho Líquido", NL = "Perda Líquida"),
+             color = c(GC = "gray70", NG = "#006400", NL = "#EE2C2C"))
+```
+
+
+---
+# Análise de Intensidade
+
+A função responsável pela análise é `intensityAnalysis()`, ela recebe como entrada a saída da função `contingencyTable()` e a informação das categorias `n` e `m`.
+
+--
+
+```{r}
+testSL <- intensityAnalysis(dataset = SL_2002_2014,
+                            category_n = "Ap", category_m = "SG",
+                            area_km2 = TRUE)
+```
+
+--
+
+```{r}
+summary(testSL)
+```
+
+
+---
+# Análise de Intensidade
+
+#### Tabela de resultado - Nível de Intevalo
+
+```{r echo=FALSE}
+testSL$interval_lvl@intervalData
+```
+
+
+---
+# Análise de Intensidade
+#### Nível de Intervalo (plot)
+
+```{r fig.align="center", fig.height=5, fig.width=8}
+plot(testSL$interval_lvl,
+     labels = c(leftlabel = "Mudança de area por intervalo (%)",
+                rightlabel = "Mudança anual de área (%)"),
+     marginplot = c(-8, 0), labs = c("Mudanças", "Intensidade Uniforme"), 
+     leg_curv = c(x = .3, y = .2))
+```
+---
+
+# Análise de Intensidade
+
+### <center> Nível de Categoria (tabelas) </center>
+
+--
+
+#### Dados de ganho de área
+
+```{r echo=FALSE}
+testSL$category_lvlGain@categoryData[c(1:4), ]
+```
+
+--
+
+#### Dados de perda de área
+
+```{r echo=FALSE}
+testSL$category_lvlLoss@categoryData[c(1:4), ]
+```
+
+
+
+---
+
+# Análise de Intensidade
+
+## <center> Nível de Categoria (plot) </center>
+
+--
+
+background-image: url(img/categoria.png)
+background-size: 900px
+background-position: 50% 70%
+
+
+.pull-left[
+#### Perda de área
+]
+
+.pull-right[
+#### Ganho de área
+]
+
+---
+
+# Análise de Intensidade
+
+### <center> Nível de Categoria (Estacionariedade) </center>
+
+.pull-left[
+```{r}
+testSL$category_lvlGain@categoryStationarity
+```
+]
+
+.pull-right[
+```{r}
+testSL$category_lvlLoss@categoryStationarity
+```
+]
+
+---
+
+# Análise de Intensidade
+
+### <center> Nível de Transição (tabelas) </center>
+
+#### Dados de ganho da categoria _n_
+
+```{r echo=FALSE}
+testSL$transition_lvlGain_n@transitionData[c(1:4), ]
+```
+
+--
+
+#### Dados de perda da categoria _m_
+
+```{r echo=FALSE}
+testSL$transition_lvlLoss_m@transitionData[c(1:4), ]
+```
+
+
+
+---
+
+# Análise de Intensidade
+
+## <center> Nível de Transição (plot) </center>
+
+--
+
+background-image: url(img/transicao.png)
+background-size: 900px
+background-position: 50% 70%
+
+
+.pull-left[
+#### Perda da categoria m
+]
+
+.pull-right[
+#### Ganho da categoria n
+]
+
+---
+
+# Análise de Intensidade
+
+### <center> Nível de Trasição (Estacionariedade) </center>
+
+.pull-left[
+```{r}
+testSL$transition_lvlGain_n@transitionStationarity
+```
+]
+
+.pull-right[
+```{r}
+testSL$transition_lvlLoss_m@transitionStationarity
+```
+]
+
+---
+class: inverse, middle, center
+
+# Versões Futuras
+
+
+---
+# Versões Futuras
+
+#### Funções de rasters de ganhos e de perdas (`lulc_gain()` e `lulc_loss()`)
+
+--
+
+background-image: url(img/mapas_ganhos_perdas.png)
+background-size: 900px
+background-position: 50% 70%
+
+
+.pull-left[
+#### Ganhos 2002 - 2014
+]
+
+.pull-right[
+#### Perdas 2002 - 2014
+]
+
+
+---
+# Referências
+
+ALDWAIK, S. Z.; PONTIUS, R. G. Intensity analysis to unify measurements of size and stationarity of land changes by interval, category, and transition. Landscape and Urban Planning, v. 106, n. 1, p. 103–114, 2012. https://doi.org/10.1016/j.landurbplan.2012.02.010.
+
+EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL. Mapeamento da Bacia do Alto Paraguai. Disponível em: https://www.embrapa.br/pantanal/bacia-do-alto-paraguai. Acesso em: 22 ago. 2020.
+
+EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL. 2015. Monitoramento das alterações da cobertura vegetal e uso do Solo na Bacia do Alto Paraguai – Porção Brasileira – Período de Análise: 2012 a 2014. 4th ed. Brasilia. https://www.embrapa.br/documents/1354999/1529097/BAP+-+Mapeamento+da+Bacia+do+Alto+Paraguai+-+estudo+completo/e66e3afb-2334-4511-96a0-af5642a56283.
+
+EXAVIER, R.; ZEILHOFER, P. OpenLand: Quantitative Analysis and Visualization of LUCC, 2020. https://cran.r-project.org/package=OpenLand.
+
+---
+
+class: clear, center, middle
+
+
+<br><br><br>
+## <center>Réginal Exavier</center>
+
+`r icon::fa_envelope()` [reginalexavier@rocketmail.com](reginalexavier@rocketmail.com)
+<br>
+`r icon::fa_github()` [@reginalexavier](https://github.com/reginalexavier)
+
+<br><br>
+
+## <center>Obrigado!</center>
+
+
+<br><br>
+
+Slides criados via pacote [xaringan](https://github.com/yihui/xaringan) e tema [Metropolis](https://github.com/pat-s/xaringan-metropolis)
+

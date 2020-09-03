@@ -47,7 +47,7 @@ Este material visa ajudar o usuário na estrutura da análise que propõe o paco
 ##### Modo de usar o tutorial:
 É preciso baixar este projeto diretamente [nesta página no GitHub](https://github.com/reginalexavier/Tutorial_OpenLand);  abrir o arquivo `Tutorial_Openland.Rproj` de preferencia com o RStudio. Com o projeto aberto no RStudio, dentro da pasta principal do projeto tem uma subpasta nomeada `Estudo_de_caso` que contem os scripts da análise do tutorial (`Openland_tutorial.Rmd`) e os 5 arquivos raster `(`r list.files("Estudo_de_caso/raw_tif")`)` da bacia do Rio São Lourenço na subpasta `raw_tif`.
 
-#### [>>>> Slides de apresentação](https://reginalexavier.github.io/Tutorial_OpenLand/slides/OpenLand_slide) 
+#### [>>>> Slides de apresentação](https://reginalexavier.github.io/Tutorial_OpenLand) 
 
 
 

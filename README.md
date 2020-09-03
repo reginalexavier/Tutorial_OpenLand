@@ -84,7 +84,7 @@ tutorial (`Openland_tutorial.Rmd`) e os 5 arquivos raster
 landscape_2012.tif, landscape_2014.tif)` da bacia do Rio São Lourenço na
 subpasta `raw_tif`.
 
-#### [\>\>\>\> Slides de apresentação](https://reginalexavier.github.io/Tutorial_OpenLand/slides/OpenLand_slide)
+#### [\>\>\>\> Slides de apresentação](https://reginalexavier.github.io/Tutorial_OpenLand)
 
 #### Referências
 

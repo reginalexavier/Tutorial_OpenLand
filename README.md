@@ -74,15 +74,17 @@ composta por cinco rasters de UCT: 2002, 2008, 2010, 2012 e 2014.
 
 ##### Modo de usar o tutorial:
 
-É preciso baixar este projeto diretamente na [sua página inicial no
+É preciso baixar este projeto diretamente [nesta página no
 GitHub](https://github.com/reginalexavier/Tutorial_OpenLand); abrir o
 arquivo `Tutorial_Openland.Rproj` de preferencia com o RStudio. Com o
-projeto aberto no RSTudio, dentro da pasta principal do projeto tem uma
+projeto aberto no RStudio, dentro da pasta principal do projeto tem uma
 subpasta nomeada `Estudo_de_caso` que contem os scripts da análise do
 tutorial (`Openland_tutorial.Rmd`) e os 5 arquivos raster
 `(landscape_2002.tif, landscape_2008.tif, landscape_2010.tif,
-landscape_2012.tif, landscape_2014.tif)` da nossa área de estudo na
+landscape_2012.tif, landscape_2014.tif)` da bacia do Rio São Lourenço na
 subpasta `raw_tif`.
+
+#### [\>\>\>\> Slides de apresentação](https://reginalexavier.github.io/Tutorial_OpenLand/slides/OpenLand_slide)
 
 #### Referências
 
@@ -93,14 +95,14 @@ transition. Landscape and Urban Planning, v. 106, n. 1, p. 103–114,
 
 EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL. Mapeamento da
 Bacia do Alto Paraguai. Disponível em:
-<https://www.embrapa.br/pantanal/baciado-alto-paraguai>. Acesso em: 22
+<https://www.embrapa.br/pantanal/bacia-do-alto-paraguai>. Acesso em: 22
 ago. 2020.
 
 EMBRAPA PANTANAL; INSTITUTO SOS PANTANAL; WWF-BRASIL. 2015.
 Monitoramento das alterações da cobertura vegetal e uso do Solo na Bacia
 do Alto Paraguai – Porção Brasileira – Período de Análise: 2012 a 2014.
 4th ed. Brasilia.
-<https://d3nehc6yl9qzo4.cloudfront.net/downloads/publicacao_bap_relatorio_2012_2014_web.pdf>.
+<https://www.embrapa.br/documents/1354999/1529097/BAP+-+Mapeamento+da+Bacia+do+Alto+Paraguai+-+estudo+completo/e66e3afb-2334-4511-96a0-af5642a56283>.
 
 EXAVIER, R.; ZEILHOFER, P. OpenLand: Quantitative Analysis and
 Visualization of LUCC, 2020.

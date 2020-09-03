@@ -1,3 +1,3 @@
 # Github page
 
-[link de acesso dos slides](/docs/OpenLand_slides.html)
+[link de acesso dos slides](/OpenLand_slides.html)

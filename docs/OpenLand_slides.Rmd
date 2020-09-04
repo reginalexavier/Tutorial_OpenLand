@@ -2,8 +2,7 @@
 title: "OpenLand <br>"
 subtitle: "<br/>Uma ferramenta livre para análise quantitativa de mudanças de uso e cobertura da terra (UCT)"
 author: "Réginal Exavier"
-# institute: "RStudio, PBC"
-date: "<br> 31/08/2020"
+date: "<br> 04/09/2020"
 output:
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts]
@@ -74,8 +73,8 @@ class: inverse, middle, center
 --
 
 #### Métodos para quantificação de mudanças de UCT
-  * Formas de análise e visualização espaciais e não espaciais
-  * Análise de Intensidade
+  * Formas de análise e visualização espaciais e não espaciais;
+  * Análise de Intensidade.
 
 --
 
@@ -89,7 +88,7 @@ class: inverse, middle, center
 --
 
 background-image: url(img/tabela_equacao.jpg)
-background-size: 750px
+background-size: 800px
 background-position: 50% 85%
 
 
@@ -103,7 +102,7 @@ background-position: 50% 85%
 $$\begin{equation}
 S_t = \frac{área\ mudada\ no\ interválo\ \left[Y_{t}, Y_{t+1}\right]}{duração\ do\ interválo \left[Y_{t}, Y_{t+1}\right] * (área\ de\ estudo)} \times 100\% \\
 = 
-\frac{\sum_{j=1}^{J} \left[( \sum_{i=1}^{J} C_{tij}) - C_{tij} \right]}{(Y_{t+1} - Y_{t})\left(\sum_{j=1}^{J} \sum_{i=1}^{J} C_{tij}\right)} \times 100\%
+\frac{\sum_{j=1}^{J} \left[( \sum_{i=1}^{J} C_{tij}) - C_{tjj} \right]}{(Y_{t+1} - Y_{t})\left(\sum_{j=1}^{J} \sum_{i=1}^{J} C_{tij}\right)} \times 100\%
 \end{equation}$$
 
 --
@@ -111,7 +110,7 @@ S_t = \frac{área\ mudada\ no\ interválo\ \left[Y_{t}, Y_{t+1}\right]}{duraçã
   * #### Intensidade uniforme:
 $$\begin{equation}
 U = \frac{área\ mudada\ em\ todos\ os\ intervalos\ \left[Y_{t}, Y_{t+1}\right]}{(duração\ de\ todos\ os\ interválos \left[Y_{t}, Y_{t+1}\right]) * (área\ de\ estudo)} \times 100\% \\
-= \frac{\sum_{t=1}^{T-1} \left\{(Y_{t+1} - Y_t) \sum_{j=1}^{J} \left[\left(\sum_{i=1}^{J} C_{tij}\right) - C_{tjj}   \right]\right\}}{(Y_{T} - Y1) \sum_{t=1}^{T-1} \left[(Y_{t+1} - Y_t) \left(\sum_{j=1}^{J} \sum_{i=1}^{J} C_{tij}\right)  \right]} \times 100\%
+= \frac{\sum_{t=1}^{T-1} \left\{(Y_{t+1} - Y_t) \sum_{j=1}^{J} \left[\left(\sum_{i=1}^{J} C_{tij}\right) - C_{tjj}   \right]\right\}}{(Y_{T} - Y_{1}) \sum_{t=1}^{T-1} \left[(Y_{t+1} - Y_t) \left(\sum_{j=1}^{J} \sum_{i=1}^{J} C_{tij}\right)  \right]} \times 100\%
 \end{equation}$$
 
 ---
@@ -123,7 +122,7 @@ U = \frac{área\ mudada\ em\ todos\ os\ intervalos\ \left[Y_{t}, Y_{t+1}\right]}
   * #### Intensidade anual do ganho bruto de uma categoria 𝑗 em um determinado intervalo de tempo:
 $$\begin{equation}
 G_{tj} = \frac{ganho\ bruto\ da\ classe\ j\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ categoria\ j\ no\ tempo\ Y_{t+1})}\times 100\% \\
-= \frac{\left[\left( \sum_{i=1}^{J} C_{tij} \right) - C_{tjj}   \right] / (Y_{t+1} - Y_t)}{\sum_{i=1}^{J} C_{tij})} \times 100\%
+= \frac{\left[\left( \sum_{i=1}^{J} C_{tij} \right) - C_{tjj}   \right] / (Y_{t+1} - Y_t)}{\sum_{i=1}^{J} C_{tij}} \times 100\%
 \end{equation}$$
 
 --
@@ -131,7 +130,7 @@ G_{tj} = \frac{ganho\ bruto\ da\ classe\ j\ durante\ \left[Y_{t},\ Y_{t+1}\right
   * #### Intensidade anual da perda bruta de uma categoria 𝑗 em um dado intervalo de tempo:
 $$\begin{equation}
 L_{ti} = \frac{perda\ bruta\ da\ classe\ i\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ categoria\ i\ no\ tempo\ Y_{t}} \times 100\% \\
-= \frac{\left[\left( \sum_{j=1}^{J} C_{tij} \right) - C_{tii}   \right] / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J} C_{tij})} \times 100\%
+= \frac{\left[\left( \sum_{j=1}^{J} C_{tij} \right) - C_{tii}   \right] / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J} C_{tij}} \times 100\%
 \end{equation}$$
 
 
@@ -144,7 +143,7 @@ L_{ti} = \frac{perda\ bruta\ da\ classe\ i\ durante\ \left[Y_{t},\ Y_{t+1}\right
   * #### Intensidade anual de transição de uma categoria i para uma categoria n em um dado intervalo de tempo:
 $$\begin{equation}
 R_{tin} = \frac{área\ de\ transição\ da\ classe\ i\ para\ n\ durante\  \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ classe\ i\ no\ tempo\ Y_{t})} \times 100\% \\
-= \frac{C_{tin} / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J} C_{tij})} \times 100\%
+= \frac{C_{tin} / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J} C_{tij}} \times 100\%
 \end{equation}$$
 
 --
@@ -408,7 +407,7 @@ SL_2002_2014$tb_legend
 ```{r echo=TRUE, warning=FALSE}
 testacc <- acc_changes(path = here("Estudo_de_caso/raw_tif"))
 
-testacc
+testacc # o objeto criado
 ```
 
 

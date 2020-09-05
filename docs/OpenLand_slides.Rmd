@@ -27,8 +27,8 @@ background-position: 95% 30%
 
 
 ### 1 Introdução
-  * Dados de Uso e Cobertura da Terra (UCT);
-  * Quantificação de mudanças de UCT;
+  * Dados de Uso e Cobertura da Terra (UCT)
+  * Quantificação de mudanças de UCT
   * Desafios
 
 ### 2 Análise de Intensidade
@@ -57,24 +57,20 @@ class: inverse, middle, center
 --
 
 #### Sustentação e compreensão dos processos de mudanças/transição de UCT
-
---
-  * Passados e em andamento;
-
---
-  * Desenvolvimento de modelos;
+  * Passados e em andamento
+  * Desenvolvimento de modelos
 
 --
 
 #### Processamento e análise de series espaço temporais de UCT
-  * Disponibilidade crescente de dados UCT provenientes de sensoriamento remoto;
-  * Trabalho manual extenso para análise de conjuntos de grande volume;
+  * Disponibilidade crescente de dados UCT provenientes de sensoriamento remoto
+  * Trabalho manual extenso para análise de conjuntos de grande volume
 
 --
 
 #### Métodos para quantificação de mudanças de UCT
-  * Formas de análise e visualização espaciais e não espaciais;
-  * Análise de Intensidade.
+  * Formas de análise e visualização espaciais e não espaciais
+  * Análise de Intensidade
 
 --
 
@@ -119,7 +115,7 @@ U = \frac{área\ mudada\ em\ todos\ os\ intervalos\ \left[Y_{t}, Y_{t+1}\right]}
 
 --
 
-  * #### Intensidade anual do ganho bruto de uma categoria 𝑗 em um determinado intervalo de tempo:
+  * #### Intensidade anual do ganho bruto de uma categoria $j$ em um determinado intervalo de tempo:
 $$\begin{equation}
 G_{tj} = \frac{ganho\ bruto\ da\ classe\ j\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ categoria\ j\ no\ tempo\ Y_{t+1})}\times 100\% \\
 = \frac{\left[\left( \sum_{i=1}^{J} C_{tij} \right) - C_{tjj}   \right] / (Y_{t+1} - Y_t)}{\sum_{i=1}^{J} C_{tij}} \times 100\%
@@ -127,7 +123,7 @@ G_{tj} = \frac{ganho\ bruto\ da\ classe\ j\ durante\ \left[Y_{t},\ Y_{t+1}\right
 
 --
 
-  * #### Intensidade anual da perda bruta de uma categoria 𝑗 em um dado intervalo de tempo:
+  * #### Intensidade anual da perda bruta de uma categoria $i$ em um dado intervalo de tempo:
 $$\begin{equation}
 L_{ti} = \frac{perda\ bruta\ da\ classe\ i\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ categoria\ i\ no\ tempo\ Y_{t}} \times 100\% \\
 = \frac{\left[\left( \sum_{j=1}^{J} C_{tij} \right) - C_{tii}   \right] / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J} C_{tij}} \times 100\%
@@ -140,7 +136,7 @@ L_{ti} = \frac{perda\ bruta\ da\ classe\ i\ durante\ \left[Y_{t},\ Y_{t+1}\right
 
 --
 
-  * #### Intensidade anual de transição de uma categoria i para uma categoria n em um dado intervalo de tempo:
+  * #### Intensidade anual de transição de uma categoria $i$ para uma categoria $n$ em um dado intervalo de tempo:
 $$\begin{equation}
 R_{tin} = \frac{área\ de\ transição\ da\ classe\ i\ para\ n\ durante\  \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ classe\ i\ no\ tempo\ Y_{t})} \times 100\% \\
 = \frac{C_{tin} / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J} C_{tij}} \times 100\%
@@ -148,7 +144,7 @@ R_{tin} = \frac{área\ de\ transição\ da\ classe\ i\ para\ n\ durante\  \left[
 
 --
 
-  * #### Intensidade uniforme de transição de todas as categorias não-𝑛 para uma categoria n em um dado intervalo de tempo:
+  * #### Intensidade uniforme de transição de todas as categorias não- $n$ para uma categoria $n$ em um dado intervalo de tempo:
 $$\begin{equation}
 W_{tn} = \frac{ganho\ bruto\ da\ classe\ n\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ que\ não\ é\ da\ classe\ n\ no\ tempo\ Y_{t})} \times 100\% \\
 =\frac{\left[\left( \sum_{i=1}^{J} C_{tin} \right) - C_{tnn}   \right] / (Y_{t+1} - Y_t)}{\sum_{j=1}^{J}  \left[\left( \sum_{i=1}^{J} C_{tij} \right) - C_{tnj}   \right]} \times 100\%
@@ -161,14 +157,14 @@ W_{tn} = \frac{ganho\ bruto\ da\ classe\ n\ durante\ \left[Y_{t},\ Y_{t+1}\right
 
 --
 
-  * #### Intensidade anual de transição de uma categoria 𝑚 para uma categoria 𝑗 em um dado intervalo de tempo:
+  * #### Intensidade anual de transição de uma categoria $m$ para uma categoria $j$ em um dado intervalo de tempo:
 $$\begin{equation}
 Q_{tmj} = \frac{área\ de\ transição\ da\ classe\ m\ para\ j\ durante\  \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ da\ classe\ j\ no\ tempo\ Y_{t+1})} \times 100\% \\
 = \frac{C_{tmj} / (Y_{t+1} - Y_t)}{\sum_{i=1}^{J} C_{tij}} \times 100\%
 \end{equation}$$
 
 --
-  * #### Intensidade uniforme de transição de todas as categorias não-m para uma categoria m em um determinado intervalo de tempo:
+  * #### Intensidade uniforme de transição de todas as categorias não- $m$ para uma categoria $m$ em um determinado intervalo de tempo:
 $$\begin{equation}
 V_{tm}= \frac{perda\ bruta\ da\ classe\ m\ durante\ \left[Y_{t},\ Y_{t+1}\right]}{(duração\ de\ \left[Y_{t},\ Y_{t+1}\right] ) * (área\ que\ não\ é\ da\ classe\ m\ no\ tempo\ Y_{t+1})} \times 100\% \\
 = \frac{\left[\left( \sum_{j=1}^{J} C_{tmj} \right) - C_{tmm}   \right] / (Y_{t+1} - Y_t)}{\sum_{i=1}^{J}  \left[\left( \sum_{j=1}^{J} C_{tij} \right) - C_{tim}   \right]} \times 100\%
@@ -501,7 +497,7 @@ netgrossplot(dataset = SL_2002_2014$lulc_Multistep,
 ---
 # Análise de Intensidade
 
-A função responsável pela análise é `intensityAnalysis()`, ela recebe como entrada a saída da função `contingencyTable()` e a informação das categorias `n` e `m`.
+A função responsável pela análise é `intensityAnalysis()`, ela recebe como entrada a saída da função `contingencyTable()` e a informação das categorias $n$ e $m$.
 
 --
 
@@ -592,13 +588,14 @@ background-position: 50% 70%
 
 .pull-left[
 ```{r}
-testSL$category_lvlGain@categoryStationarity
+testSL$category_lvlLoss@categoryStationarity
 ```
 ]
 
+
 .pull-right[
 ```{r}
-testSL$category_lvlLoss@categoryStationarity
+testSL$category_lvlGain@categoryStationarity
 ```
 ]
 
@@ -608,7 +605,7 @@ testSL$category_lvlLoss@categoryStationarity
 
 ### <center> Nível de Transição (tabelas) </center>
 
-#### Dados de ganho da categoria _n_
+#### Dados de ganho da categoria $n$
 
 ```{r echo=FALSE}
 testSL$transition_lvlGain_n@transitionData[c(1:4), ]
@@ -616,7 +613,7 @@ testSL$transition_lvlGain_n@transitionData[c(1:4), ]
 
 --
 
-#### Dados de perda da categoria _m_
+#### Dados de perda da categoria $m$
 
 ```{r echo=FALSE}
 testSL$transition_lvlLoss_m@transitionData[c(1:4), ]
@@ -638,11 +635,11 @@ background-position: 50% 70%
 
 
 .pull-left[
-#### Perda da categoria m
+#### Ganho da categoria $n$
 ]
 
 .pull-right[
-#### Ganho da categoria n
+#### Perda da categoria $m$
 ]
 
 ---
@@ -651,17 +648,20 @@ background-position: 50% 70%
 
 ### <center> Nível de Trasição (Estacionariedade) </center>
 
+
 .pull-left[
 ```{r}
 testSL$transition_lvlGain_n@transitionStationarity
 ```
 ]
 
+
 .pull-right[
 ```{r}
 testSL$transition_lvlLoss_m@transitionStationarity
 ```
 ]
+
 
 ---
 class: inverse, middle, center
@@ -672,7 +672,7 @@ class: inverse, middle, center
 ---
 # Versões Futuras
 
-#### Funções de rasters de ganhos e de perdas (`lulc_gain()` e `lulc_loss()`)
+#### Funções de rasters de ganhos e de perdas (`lulc_loss()` e `lulc_gain()`)
 
 --
 
@@ -682,13 +682,13 @@ background-position: 50% 70%
 
 
 .pull-left[
-#### Ganhos 2002 - 2014
-]
-
-.pull-right[
 #### Perdas 2002 - 2014
 ]
 
+
+.pull-right[
+#### Ganhos 2002 - 2014
+]
 
 ---
 # Referências
